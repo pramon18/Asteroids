@@ -1,0 +1,19 @@
+/*Lista de Afazeres*/
+
+ Asteroids_Pygame.py
+ - Comecar a utilizar os botoes especiais (Force, Hot, e Awesome)
+ - Repensar como o score e calculado, e implementar uma maneira melhor
+ - Fazer Tela de Game Over, e You Win (Background + Texto)
+ - Implementar estados de Game Over e You Win
+ - Mixar e testar som de tiro #OK!
+ - Otimizar checagem de colisões usando o collidelist() #OK!
+ - Limitar Frames Per Second a 50 fps
+ - Criar funções de criar os botões
+ - Criar funções para as operações que são utilizadas com mais frequencia
+ - Criar novo rect e diminuir o tamanho dele e colocar o centro com o mesmo centro do asteroid
+
+ Mock_Asteroids.py
+ - Programa Mock Asteroids tentar implementar uma caixa de diálogo #OK
+ - Fazer imagem da caixa de diálogo #OK!
+ - Usar fontes baixadas recentemente
+ - Tentar implementar os botões nesse arquivo
