@@ -312,7 +312,7 @@ while True:
 			screen.blit(text_font.render(point_Score + str(score), True, (255,255,255)),(10,430))
 			
 			pygame.display.flip()
-			clock.tick(30)
+			clock.tick(60)
 			pygame.display.set_caption(str(clock.get_fps()))
 	elif state == "main menu":
 		'main menu music'
@@ -344,5 +344,5 @@ while True:
 			screen.blit(text_font.render("Press P to play", True, text_color),(240,370))
 			screen.blit(text_font.render("Press Q to exit", True, text_color),(240,400))
 			pygame.display.flip()
-			clock.tick(30)
+			clock.tick(60)
 			pygame.display.set_caption(str(clock.get_fps()))
