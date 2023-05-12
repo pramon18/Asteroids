@@ -210,7 +210,8 @@ while True:
 			#shot = pygame.mixer.Sound("sons\shot.ogg")
 
 			if pressed_Keys[pygame.K_SPACE]:
-				if len(b) < 1:
+				# change here to increase the max amount of bullets in the screen
+				if len(b) < 30:
 					b.append(list(create_Bullet("bullet.bmp",(135,254,255), ship_Angle)))					
 					#shot.set_volume(0.1)
 					#shot.play()
