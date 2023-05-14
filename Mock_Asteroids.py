@@ -76,7 +76,7 @@ def moveasteroid(cont, asteroid_Angle, a_velocity_x, a_velocity_y):
 pygame.init()
 screen = pygame.display.set_mode((640,480))
 
-background = pygame.image.load("background.bmp")
+background = pygame.image.load("img/background.bmp")
 
 a = []
 
@@ -96,7 +96,7 @@ while True:
 		cont = 1
 	
 	if seconds % 1 == 0 and cont == 1:
-		a.append(list(create_Asteroid("asteroid.bmp",(135,254,255))))
+		a.append(list(create_Asteroid("img/asteroid-0001.png",(135,254,255))))
 		cont = 0
 
 
