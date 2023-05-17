@@ -3,10 +3,10 @@ import pygame, sys, math, time, random
 def moveship(pressed_Keys, ship_Angle):
 	'if the left key is pressed, the ship will rotate to the left'
 	if pressed_Keys[pygame.K_LEFT]:
-		ship_Angle += 1.5
+		ship_Angle += 2.5
 
 	if pressed_Keys[pygame.K_RIGHT]:
-		ship_Angle -= 1.5
+		ship_Angle -= 2.5
 	return ship_Angle
 
 def movebullet(cont, bullet_Angle, b_velocity_x, b_velocity_y):
@@ -28,7 +28,7 @@ def moveasteroid(cont, asteroidrect):
 
 def create_Bullet(name, color, ship_Angle):
 	'bullet'
-	bullet = pygame.image.load(name)
+	bullet = pygame.image.load('img/' + name)
 	bullet.set_colorkey(color)
 	bulletrect = bullet.get_rect()
 	bulletrect.center = (320,240)
@@ -40,7 +40,7 @@ def create_Bullet(name, color, ship_Angle):
 
 def create_Asteroid(name, color):
 	'name will be the path of the image file'
-	asteroid = pygame.image.load(name)
+	asteroid = pygame.image.load('img/' + name)
 
 	'set colorkey will be for ignore the ciano pixels that were used in the asteroid drawing'
 	asteroid.set_colorkey(color)
@@ -123,15 +123,15 @@ state = "main menu"
 while True:
 
 	'background'
-	background = pygame.image.load("background.bmp")
+	background = pygame.image.load("img/background.bmp")
 
 	'time handling'
 	seconds = 0
 	tempo = pygame.time.get_ticks()
 
 	'ship'
-	ship = pygame.image.load("ship.bmp")
-	ship.set_colorkey((135,254,255))
+	ship = pygame.image.load("img/Ship-0001.png")
+	#ship.set_colorkey((135,254,255))
 	shiprect = ship.get_rect()
 	shiprect.center = (320,240)
 	ship_Angle = 270
@@ -139,30 +139,30 @@ while True:
 	#shiprect.y = 240
 
 	'one asteroid'
-	asteroid = pygame.image.load("asteroid.bmp")
+	asteroid = pygame.image.load("img/asteroid-0001.png")
 	asteroid.set_colorkey((135,254,255))
 	asteroidrect = asteroid.get_rect()
 	asteroidrect.center = (0,240)
 
 	'special buttons'
-	awesome_Button = pygame.image.load("awesome_Button.bmp")
+	awesome_Button = pygame.image.load("img/awesome-button-0001.png")
 	awesome_Button.set_colorkey((135,254,255))
 	awesome_Button_rect = awesome_Button.get_rect()
 
-	hot_Button = pygame.image.load("hot_Button.bmp")
+	hot_Button = pygame.image.load("img/hot-button-0001.png")
 	hot_Button.set_colorkey((135,254,255))
 	hot_Button_rect = hot_Button.get_rect()
 	
-	force_Button = pygame.image.load("force_Button.bmp")
+	force_Button = pygame.image.load("img/force-button-0001.png")
 	force_Button.set_colorkey((135,254,255))
 	force_Button_rect = force_Button.get_rect()
 	
-	bounce_Button = pygame.image.load("bounce_Button.bmp")
+	bounce_Button = pygame.image.load("img/bounce-button-0001.png")
 	bounce_Button.set_colorkey((135,254,255))
 	bounce_Button_rect = bounce_Button.get_rect()
 	
 	'main menu'
-	menu = pygame.image.load("main_menu.bmp")
+	menu = pygame.image.load("img/main_menu.bmp")
 
 	'bullets list'
 	b = []
@@ -212,7 +212,7 @@ while True:
 			if pressed_Keys[pygame.K_SPACE]:
 				# change here to increase the max amount of bullets in the screen
 				if len(b) < 30:
-					b.append(list(create_Bullet("bullet.bmp",(135,254,255), ship_Angle)))					
+					b.append(list(create_Bullet("bullet-0001.png",(135,254,255), ship_Angle)))					
 					#shot.set_volume(0.1)
 					#shot.play()
 				else:
@@ -225,7 +225,7 @@ while True:
 				cont = 1
 	
 			if seconds % 3 == 0 and cont == 1:
-				a.append(list(create_Asteroid("asteroid.bmp",(135,254,255))))
+				a.append(list(create_Asteroid("asteroid-0001.png",(135,254,255))))
 				cont = 0
 
 			screen.blit(background, (0,0))
