@@ -28,28 +28,6 @@ class Player(pygame.sprite.Sprite):
         if self.rect.left > WIDTH:
             self.rect.right = 0
 
-
-class Mob(pygame.sprite.Sprite):
-    # Initially this mob will spawn above the screen 
-    # and in a random horizontal location
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((30, 40))
-        self.image.fill(RED)
-        self.rect = self.image.get_rect()
-        self.rect.x = random.randrange(WIDTH - self.rect.width)
-        self.rect.y = random.randrange(-100, -40)
-        self.speedy = random.randrange(1, 8)
-    
-    # If the mob goes out of the screen (bottom) move it above 
-    # the screen again (basically a respawn)
-    def update(self):
-        self.rect.y += self.speedy
-        if self.rect.top > HEIGHT + 10:
-            self.rect.x = random.randrange(WIDTH - self.rect.width)
-            self.rect.y = random.randrange(-100, -40)
-            self.speedy - random.randrange(1, 8)
-
 # initialize pygame and create window
 pygame.init()
 pygame.mixer.init()
@@ -83,3 +61,5 @@ while running:
 
     # keep loop running at the right speed
     clock.tick(FPS)
+
+pygame.quit()
