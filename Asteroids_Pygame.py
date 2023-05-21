@@ -1,4 +1,94 @@
 import pygame, sys, math, time, random
+from os import path
+
+# Constants
+WIDTH = 640
+HEIGHT = 480
+FPS = 60
+
+# Colors
+BLACK = (0, 0, 0)
+
+# Game paths
+game_folder = path.dirname(__file__)
+img_folder = path.join(game_folder, 'img')
+
+class Player(pygame.sprite.Sprite):
+	def __init__(self):
+		pygame.sprite.Sprite.__init__(self)
+		self.angle = 0
+		self.original_image = ship_img
+		self.image = pygame.transform.rotate(self.original_image, self.angle)
+		self.rect = self.image.get_rect()
+		
+		# Start ship at the center
+		self.rect.centerx = WIDTH / 2
+		self.rect.bottom = HEIGHT / 2
+		self.speedx = 0
+		self.speedy = 0		
+	
+	def update(self):
+		keystate = pygame.key.get_pressed()
+
+		# if the left key is pressed, the ship will rotate to the left
+		if keystate[pygame.K_LEFT]:
+			self.angle += 3.5
+		if keystate[pygame.K_RIGHT]:
+			self.angle -= 3.5		
+		if keystate[pygame.K_a]:
+			self.angle -= 3.5
+		if keystate[pygame.K_d]:
+			self.angle += 3.5
+		if keystate[pygame.K_SPACE]:
+			ship.shoot()
+
+		# Rotate
+		self.image = pygame.transform.rotate(self.original_image, ship.angle)
+		self.rect = self.image.get_rect()
+
+		# Center ship
+		self.rect.centerx = WIDTH / 2
+		self.rect.centery = HEIGHT / 2
+
+		# Set velocity of moviment back to zero
+		self.speedx = 0
+		self.speedy = 0
+	
+	def shoot(self):
+		bullet = Bullet(self.angle + 90, self.rect.center, self.rect.top)
+		all_sprites.add(bullet)
+		bullets.add(bullet)
+
+class Bullet(pygame.sprite.Sprite):
+	def __init__(self, angle, center, bottom):
+		pygame.sprite.Sprite.__init__(self)
+		self.angle = angle
+		self.original_image = bullet_img
+		self.image = pygame.transform.rotate(self.original_image, self.angle)
+		self.rect = self.image.get_rect()
+		self.rect.center = center
+		#self.rect.bottom = bottom
+		self.speedx = 0
+		self.speedy = 0
+
+	def update(self):
+		# Set velocity of moviment back to zero
+		self.speedx = 6
+		self.speedy = -6
+
+		self.rect.x += (self.speedx * math.cos(math.radians(self.angle)))
+		self.rect.y += (self.speedy * math.sin(math.radians(self.angle)))
+
+		# Check if is still in the screen
+		if self.rect.x > WIDTH or self.rect.x < 0 or self.rect.y > HEIGHT or self.rect.y < 0:
+			self.kill()
+
+				
+'''
+# Move at an angle
+self.rect.x += (self.speedx * -math.cos(math.radians(self.angle)))
+self.rect.y += (self.speedy * math.sin(math.radians(self.angle)))
+		'''	
 
 def moveship(pressed_Keys, ship_Angle):
 	'if the left key is pressed, the ship will rotate to the left'
@@ -109,26 +199,60 @@ def moveasteroid(cont, asteroid_Angle, a_velocity_x, a_velocity_y):
 	return a_velocity_x, a_velocity_y
 
 
+# Init pygame, set title and init clock
 pygame.init()
+pygame.mixer.init()
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Asteroids")
+clock = pygame.time.Clock()
 
-'screen size and screen set'
-size = 640,480
-screen = pygame.display.set_mode(size)
-'name of the game'
-pygame.display.set_caption("Asteroids.")
+# Load game graphics
+background = pygame.image.load(path.join(img_folder, 'background.bmp')).convert()
+background_rect = background.get_rect()
+
+main_menu = pygame.image.load(path.join(img_folder, 'main_menu.bmp')).convert()
+main_menu = main_menu.get_rect()
+
+ship_img = pygame.image.load(path.join(img_folder, 'ship-0001.png')).convert_alpha()
+asteroid_img = pygame.image.load(path.join(img_folder, 'asteroid-0001.png')).convert_alpha()
+bullet_img = pygame.image.load(path.join(img_folder, 'bullet-0001.png')).convert_alpha()
+
+all_sprites = pygame.sprite.Group()
+mobs = pygame.sprite.Group()
+bullets = pygame.sprite.Group()
+
+ship = Player()
+all_sprites.add(ship)
 
 'game state'
 state = "main menu"
 
-while True:
+# Game loop
+running = True
+while running:
+	# Process input
+	for event in pygame.event.get():
+		# check for closing window
+		if event.type == pygame.QUIT:
+			running = False
+		
+		# check pressed keys
+		keystate = pygame.key.get_pressed()
 
-	'background'
-	background = pygame.image.load("img/background.bmp")
+		if keystate[pygame.K_SPACE]:
+			ship.shoot()
 
-	'time handling'
-	seconds = 0
-	tempo = pygame.time.get_ticks()
+	# Draw / render
+	screen.fill(BLACK)
+	screen.blit(background, background_rect)
+	all_sprites.draw(screen)	
 
+	#ship.rotated_image.blit(screen, ship.rotated_rect)
+
+	# Update
+	all_sprites.update()
+
+	'''
 	'ship'
 	ship = pygame.image.load("img/Ship-0001.png")
 	#ship.set_colorkey((135,254,255))
@@ -347,3 +471,12 @@ while True:
 			pygame.display.flip()
 			clock.tick(60)
 			pygame.display.set_caption(str(clock.get_fps()))
+			'''
+	# *after* drawing everything, flip the display
+	pygame.display.flip()
+
+	# keep loop running at the right speed
+	clock.tick(FPS)
+
+# When the game stops running, quit
+pygame.quit()
