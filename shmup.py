@@ -26,6 +26,8 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = player_img
         self.rect = self.image.get_rect()
+        self.radius = 15
+        #pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
         self.rect.centerx = WIDTH / 2
         self.rect.bottom = HEIGHT - 10
         self.speedx = 0
@@ -48,6 +50,10 @@ class Player(pygame.sprite.Sprite):
         if keystate[pygame.K_d]:
             self.speedx = 8
 
+        # Shoot endlessly
+        # if keystate[pygame.K_SPACE]:
+        #     self.shoot()                
+
         # Move
         self.rect.x += self.speedx
 
@@ -67,6 +73,8 @@ class Mob(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = meteor_img
         self.rect = self.image.get_rect()
+        self.radius = int(self.rect.width * 0.85 / 2)
+        #pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
         self.rect.x = random.randrange(WIDTH - self.rect.width)
         self.rect.y = random.randrange(-100, -40)
         self.speedy = random.randrange(1, 8)
@@ -133,7 +141,7 @@ while running:
         # check for closing window
         if event.type == pygame.QUIT:
             running = False
-        elif event.type == pygame.KEYDOWN: # Shoot event
+        elif event.type == pygame.KEYDOWN: # Shoot with each keystroke
             if event.key == pygame.K_SPACE:
                 player.shoot()
     
@@ -146,7 +154,7 @@ while running:
     all_sprites.update()
 
     # Check to see if a mob hit the player
-    hits = pygame.sprite.spritecollide(player, mobs, False)
+    hits = pygame.sprite.spritecollide(player, mobs, False, pygame.sprite.collide_circle)
 
     if hits:
         running = False
