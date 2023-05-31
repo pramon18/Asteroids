@@ -71,7 +71,8 @@ class Player(pygame.sprite.Sprite):
 class Mob(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = meteor_img
+        self.image_original = random.choice(meteor_images)
+        self.image = self.image_original.copy()
         self.rect = self.image.get_rect()
         self.radius = int(self.rect.width * 0.85 / 2)
         #pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
@@ -79,6 +80,9 @@ class Mob(pygame.sprite.Sprite):
         self.rect.y = random.randrange(-100, -40)
         self.speedy = random.randrange(1, 8)
         self.speedx = random.randrange(-3, 3)
+        self.rot = 0
+        self.rot_speed = random.randrange(-8, 8)
+        self.last_update = pygame.time.get_ticks()
 
     def update(self):
         self.rect.x += self.speedx
@@ -89,6 +93,21 @@ class Mob(pygame.sprite.Sprite):
             self.rect.y = random.randrange(-100, -40)
             self.speedy = random.randrange(1, 8)
             self.speedx = random.randrange(-3, 3)
+
+    def rotate(self):
+        now = pygame.time.get_ticks()
+        if now - self.last_update > 50:
+            self.last_update = now
+            # do rotation here YAY
+            self.rot = (self.rot + self.rot_speed) % 360
+            
+            # Center the rotated image at the old center
+            new_image = pygame.transform.rotate(self.image_original, self.rot)
+            old_center = self.rect.center
+            self.image = new_image
+            self.rect = self.image.get_rect()
+            self.rect.center = old_center
+
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -117,8 +136,14 @@ background = pygame.image.load(path.join(img_folder, 'background(1).jpg')).conve
 background_rect = background.get_rect()
 
 player_img = pygame.image.load(path.join(img_folder, 'ship-0001.png')).convert_alpha()
-meteor_img = pygame.image.load(path.join(img_folder, 'asteroid-0001.png')).convert_alpha()
+#meteor_img = pygame.image.load(path.join(img_folder, 'asteroid-0001.png')).convert_alpha()
 bullet_img = pygame.image.load(path.join(img_folder, 'bullet-0001.png')).convert_alpha()
+
+meteor_images = []
+meteor_list = ['asteroid-0001.png', 'asteroid2-0001.png', 'asteroid3-0001.png']
+for img in meteor_list:
+    meteor_images.append(pygame.image.load(path.join(img_folder, img)).convert_alpha())
+
 
 # Group to hold all the sprites of the game
 all_sprites = pygame.sprite.Group()
